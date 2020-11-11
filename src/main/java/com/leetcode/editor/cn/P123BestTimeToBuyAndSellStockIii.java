@@ -36,25 +36,22 @@ public class P123BestTimeToBuyAndSellStockIii {
             if (prices == null | prices.length <= 1) {
                 return 0;
             }
-            int[][][] dp = new int[prices.length][3][2];// 三维数组，日期---交易次数[0-0次，1-1次 2-2次]---持有状态[0-未持有,1-持有]
-            for (int i = 0; i < 3; i++) {
-                // 第一天初始化
-                dp[0][i][0] = 0;
-                dp[0][i][1] = -prices[0];
+            int n = prices.length;
+            int m = 5;
+            int[][] dp = new int[n][m];// 二维数组，日期---买卖状态[0-没有买卖，1-第一次买入 2-第一次卖出 3-第二次买入 4-第二次卖出]
+            // 初始化状态
+            dp[0][1] = -prices[0];
+            dp[0][3] = -prices[0];
+            for (int i = 1; i < n; i++) {
+                for (int j = 1; j < m; j++) {
+                    if ((j & 1) == 1) { // j为大于0的奇数
+                        dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - 1] - prices[i]);
+                    } else {
+                        dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - 1] + prices[i]);
+                    }
+                }
             }
-            for (int i = 1; i < prices.length; i++) {
-                // 从第二天开始
-
-                // 第一次交易导致持有  前一天持有/前一天未持有-今天的股价
-                dp[i][0][1] = Math.max(dp[i - 1][0][1], dp[i - 1][0][0] - prices[i]);
-                // 第一次交易导致不持有
-                dp[i][1][0] = Math.max(dp[i - 1][1][0], dp[i - 1][0][1] + prices[i]);
-                // 第二次交易导致持有
-                dp[i][1][1] = Math.max(dp[i - 1][1][1], dp[i - 1][1][0] - prices[i]);
-                // 第二次交易导致不持有
-                dp[i][2][0] = Math.max(dp[i - 1][2][0], dp[i - 1][1][1] + prices[i]);
-            }
-            return dp[prices.length - 1][2][0];
+            return dp[n - 1][m - 1];
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
