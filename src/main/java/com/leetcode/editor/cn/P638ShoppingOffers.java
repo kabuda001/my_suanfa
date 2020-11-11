@@ -36,47 +36,69 @@ package com.leetcode.editor.cn;
 // 最多6种物品， 100种大礼包。 
 // 每种物品，你最多只需要购买6个。 
 // 你不可以购买超出待购清单的物品，即使更便宜。 
-// 
-// Related Topics 深度优先搜索 动态规划 
+//
+// Related Topics 深度优先搜索 动态规划
 // 👍 131 👎 0
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class P638ShoppingOffers {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
-            int result = 0;
-            int size = price.size();
-            for (int i = 0; i < size; i++) {
-                result += price.get(i) * needs.get(i);
-            }
-            for (List<Integer> item : special) {
-                // 是否有效
-                boolean isValid = true;
-                for (int i = 0; i < size; i++) {
-                    if (needs.get(i) < item.get(i)) {
-                        // 超过要买的了
-                        isValid = false;
-                    }
-                    // 减去礼包包含的商品
-                    Integer need = needs.get(i);
-                    need -= item.get(i);
-                    needs.set(i, need);
+        Map<List<Integer>, Integer> memo = new HashMap<>();
 
+        public int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
+            // 把单独购买打包成一种礼包
+            for (int i = 0; i < price.size(); i++) {
+                List<Integer> commonPrice = new ArrayList<>();
+                for (int j = 0; j < price.size(); j++) {
+                    if (i == j) {
+                        commonPrice.add(1);
+                    } else {
+                        commonPrice.add(0);
+                    }
                 }
-                if (isValid) {
-                    // 递归，needs已经减去了礼包包含
-                    result = Math.min(result, this.shoppingOffers(price, special, needs) + item.get(item.size() - 1));
-                }
-                // 还原needs
-                for (int i = 0; i < size; i++) {
-                    Integer need = needs.get(i);
-                    need += item.get(i);
-                    needs.set(i, need);
-                }
+                commonPrice.add(price.get(i));
+                special.add(commonPrice);
             }
-            return result;
+            // 把需要全部为0这种特殊情况先记忆
+            List<Integer> needZero = new ArrayList<>();
+            for (int i = 0; i < needs.size(); i++) {
+                needZero.add(0);
+            }
+            memo.put(needZero, 0);
+            return helper(special, needs);
+        }
+
+        private int helper(List<List<Integer>> special, List<Integer> needs) {
+            if (memo.containsKey(needs)) {
+                return memo.get(needs);
+            }
+            int cost = Integer.MAX_VALUE;
+            for (List<Integer> item : special) {
+                // 需要该礼包最少的数量
+                int k = Integer.MAX_VALUE;
+                for (int i = 0; i < item.size() - 1; i++) {
+                    if (item.get(i) != 0) {
+                        k = Math.min(k, needs.get(i) / item.get(i));
+                    }
+                }
+                if (k == 0) {
+                    // 不需要这个礼包，继续找下一个礼包
+                    continue;
+                }
+                List<Integer> remain = new ArrayList<>();
+                for (int i = 0; i < needs.size(); i++) {
+                    remain.add(needs.get(i) - k * item.get(i));
+                }
+                cost = Math.min(cost, this.helper(special, remain) + k * item.get(item.size() - 1));
+            }
+            // 记忆
+            memo.put(needs, cost);
+            return cost;
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
