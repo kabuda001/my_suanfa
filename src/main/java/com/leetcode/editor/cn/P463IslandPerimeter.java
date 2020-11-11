@@ -25,19 +25,39 @@ package com.leetcode.editor.cn;
 // Related Topics 哈希表 
 // 👍 284 👎 0
 
-public class P463IslandPerimeter{
+public class P463IslandPerimeter {
     //leetcode submit region begin(Prohibit modification and deletion)
-class Solution {
-    public int islandPerimeter(int[][] grid) {
+    class Solution {
+        int[] dx = {0, 1, 0, -1};
+        int[] dy = {1, 0, -1, 0};
 
+        public int islandPerimeter(int[][] grid) {
+            int res = 0;
+            int n = grid.length;
+            int m = grid[0].length;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    if (grid[i][j] == 1) {
+                        // 是陆地
+                        for (int k = 0; k < 4; k++) {
+                            int tx = i + dx[k];
+                            int ty = j + dy[k];
+                            if (tx < 0 || ty < 0 || tx >= n || ty >= m || grid[tx][ty] == 0) {
+                                // 是边界或者外围是0
+                                res++;
+                            }
+                        }
+                    }
+                }
+            }
+            return res;
+        }
     }
-}
 //leetcode submit region end(Prohibit modification and deletion)
 
 
-
-     public static void main(String[] args) {
-         //测试代码
-         Solution solution = new P463IslandPerimeter().new Solution();
-     }
+    public static void main(String[] args) {
+        //测试代码
+        Solution solution = new P463IslandPerimeter().new Solution();
+    }
 }
