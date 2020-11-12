@@ -21,19 +21,17 @@ public class P53MaximumSubarray {
             if (nums.length == 1) {
                 return nums[0];
             }
-            int count = Integer.MIN_VALUE;
-            for (int i = 0; i < nums.length; i++) {
-                int tmp = 0;
-                for (int j = i; j < nums.length; j++) {
-                    if (j == i) {
-                        tmp = nums[j];
-                    } else {
-                        tmp += nums[j];
-                    }
-                    count = Math.max(count, tmp);
+            int res = nums[0];
+            int sum = 0;
+            for (int num : nums) {
+                if (sum > 0) {
+                    sum += num;
+                } else {
+                    sum = num;
                 }
+                res = Math.max(res, sum);
             }
-            return count;
+            return res;
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
