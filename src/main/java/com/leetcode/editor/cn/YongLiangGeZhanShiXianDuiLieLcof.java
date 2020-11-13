@@ -30,18 +30,19 @@ package com.leetcode.editor.cn;
 // Related Topics 栈 设计 
 // 👍 138 👎 0
 
+import java.util.LinkedList;
 import java.util.Stack;
 
 public class YongLiangGeZhanShiXianDuiLieLcof {
     //leetcode submit region begin(Prohibit modification and deletion)
     class CQueue {
 
-        Stack<Integer> A;
-        Stack<Integer> B;
+        LinkedList<Integer> A;
+        LinkedList<Integer> B;
 
         public CQueue() {
-            A = new Stack<>();
-            B = new Stack<>();
+            A = new LinkedList<>();
+            B = new LinkedList<>();
         }
 
         public void appendTail(int value) {
