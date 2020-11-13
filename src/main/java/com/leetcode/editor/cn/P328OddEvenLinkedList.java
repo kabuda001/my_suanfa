@@ -40,31 +40,19 @@ public class P328OddEvenLinkedList {
      */
     class Solution {
         public ListNode oddEvenList(ListNode head) {
-            if (head == null||head.next == null) {
+            if (head == null || head.next == null) {
                 return head;
             }
             ListNode oddCur = head;
             ListNode evenFirst = head.next;
             ListNode evenCur = head.next;
-            while (evenCur != null) {
-                // 奇数的下一个
-                ListNode oddNext = evenCur.next;
-                if (oddNext == null) {
-                    // 奇数已经为空,奇偶相连，然后返回
-                    oddCur.next = evenFirst;
-                    break;
-                }
-                // 奇数后续
-                oddCur.next = oddNext;
+            while (evenCur != null && evenCur.next != null) {
+                oddCur.next = evenCur.next;
                 oddCur = oddCur.next;
-                // 偶数的下一个
-                ListNode evenNext = evenCur.next.next;
-                evenCur.next = evenNext;
+                evenCur.next = oddCur.next;
                 evenCur = evenCur.next;
             }
-            if (evenCur == null) {
-                oddCur.next = evenFirst;
-            }
+            oddCur.next = evenFirst;
             return head;
         }
     }
