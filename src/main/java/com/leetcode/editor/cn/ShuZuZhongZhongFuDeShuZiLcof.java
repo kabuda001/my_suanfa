@@ -28,14 +28,18 @@ public class ShuZuZhongZhongFuDeShuZiLcof {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public int findRepeatNumber(int[] nums) {
-            Set<Integer> set = new HashSet<>();
-            for (int num : nums) {
-                if (set.contains(num)) {
-                    return num;
+            int res = -1;
+            for (int i = 0; i < nums.length; i++) {
+                while (i != nums[i]) {
+                    if (nums[i] == nums[nums[i]]) {
+                        return nums[i];
+                    }
+                    int tmp = nums[i];
+                    nums[i] = nums[nums[i]];
+                    nums[tmp] = tmp;
                 }
-                set.add(num);
             }
-            return -1;
+            return res;
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
@@ -44,5 +48,6 @@ public class ShuZuZhongZhongFuDeShuZiLcof {
     public static void main(String[] args) {
         //测试代码
         Solution solution = new ShuZuZhongZhongFuDeShuZiLcof().new Solution();
+        solution.findRepeatNumber(new int[]{2, 3, 1, 0, 2, 5, 3});
     }
 }
