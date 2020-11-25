@@ -71,31 +71,30 @@ public class IncreasingDecreasingString {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public String sortString(String s) {
-            char[] chars = s.toCharArray();
-            Arrays.sort(chars);
-            char[] res = new char[chars.length];
-            int curIndex = 0;
-            while (curIndex < chars.length) {
-                char cur = Character.MIN_VALUE;
-                for (int i = 0; i < chars.length; i++) {
-                    if (chars[i] != 'A' && chars[i] > cur) {
-                        cur = chars[i];
-                        res[curIndex] = chars[i];
-                        curIndex++;
-                        chars[i] = 'A';
+            StringBuilder resBur = new StringBuilder();
+            int[] map = new int[26];
+            for (char c : s.toCharArray()) {
+                map[c - 'a']++;
+            }
+            boolean flag = true;
+            while (flag) {
+                flag = false;
+                for (int i = 0; i < 26; i++) {
+                    if (map[i] > 0) {
+                        resBur.append((char) (i + 'a'));
+                        map[i]--;
+                        flag = true;
                     }
                 }
-                cur = Character.MAX_VALUE;
-                for (int i = chars.length - 1; i >= 0; i--) {
-                    if (chars[i] != 'A' && chars[i] < cur) {
-                        cur = chars[i];
-                        res[curIndex] = chars[i];
-                        curIndex++;
-                        chars[i] = 'A';
+                for (int i = 25; i >= 0; i--) {
+                    if (map[i] > 0) {
+                        resBur.append((char) (i + 'a'));
+                        map[i]--;
+                        flag = true;
                     }
                 }
             }
-            return String.valueOf(res);
+            return resBur.toString();
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
