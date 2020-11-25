@@ -30,18 +30,17 @@ public class DiaoZhengShuZuShunXuShiQiShuWeiYuOuShuQianMianLcof {
             int start = 0;
             int end = nums.length - 1;
             while (start < end) {
-                while (start < nums.length && nums[start] % 2 == 1) {
+                while (start < end && nums[start] % 2 == 1) {
                     start++;
                 }
-                while (end >= 0 && nums[end] % 2 == 0) {
+                while (start < end && nums[end] % 2 == 0) {
                     end--;
                 }
-                if (start >= end) {
-                    continue;
+                if (start < end) {
+                    int tmp = nums[start];
+                    nums[start] = nums[end];
+                    nums[end] = tmp;
                 }
-                int tmp = nums[start];
-                nums[start] = nums[end];
-                nums[end] = tmp;
             }
             return nums;
         }
