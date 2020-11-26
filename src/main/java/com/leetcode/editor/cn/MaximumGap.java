@@ -34,7 +34,29 @@ public class MaximumGap {
             if (nums == null || nums.length < 2) {
                 return 0;
             }
-            Arrays.sort(nums);
+            int n = nums.length;
+            long exp = 1;
+            // 中间数组
+            int[] buf = new int[n];
+            int maxVal = Arrays.stream(nums).max().getAsInt();
+            while (maxVal >= exp) {
+                // 从个位数开始遍历
+                int[] cnt = new int[10]; // 0-9
+                for (int i = 0; i < n; i++) {
+                    int digit = (nums[i] / (int) exp) % 10;
+                    cnt[digit]++;
+                }
+                for (int i = 1; i < 10; i++) {
+                    cnt[i] += cnt[i - 1]; // 排序需要
+                }
+                for (int i = n - 1; i >= 0; i--) {
+                    int digit = (nums[i] / (int) exp) % 10;
+                    buf[cnt[digit] - 1] = nums[i];
+                    cnt[digit]--;
+                }
+                System.arraycopy(buf, 0, nums, 0, n);
+                exp *= 10;
+            }
             int res = Integer.MIN_VALUE;
             for (int i = 1; i < nums.length; i++) {
                 res = Math.max(res, nums[i] - nums[i - 1]);
