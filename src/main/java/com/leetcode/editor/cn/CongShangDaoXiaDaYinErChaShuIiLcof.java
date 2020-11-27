@@ -36,6 +36,12 @@ package com.leetcode.editor.cn;
 // Related Topics 树 广度优先搜索 
 // 👍 66 👎 0
 
+import com.leetcode.base.TreeNode;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 public class CongShangDaoXiaDaYinErChaShuIiLcof {
     //leetcode submit region begin(Prohibit modification and deletion)
 
@@ -50,7 +56,28 @@ public class CongShangDaoXiaDaYinErChaShuIiLcof {
      */
     class Solution {
         public List<List<Integer>> levelOrder(TreeNode root) {
-
+            List<List<Integer>> res = new ArrayList<>();
+            if (root == null) {
+                return res;
+            }
+            LinkedList<TreeNode> queue = new LinkedList<>();
+            queue.offer(root);
+            while (!queue.isEmpty()) {
+                int count = queue.size();
+                List<Integer> tmp = new ArrayList<>();
+                for (int i = 0; i < count; i++) {
+                    TreeNode node = queue.poll();
+                    tmp.add(node.val);
+                    if (node.left != null) {
+                        queue.offer(node.left);
+                    }
+                    if (node.right != null) {
+                        queue.offer(node.right);
+                    }
+                }
+                res.add(tmp);
+            }
+            return res;
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
